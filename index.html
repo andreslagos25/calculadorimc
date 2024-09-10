@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de IMC</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .calculator {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        input[type="number"], input[type="text"], select {
+            width: calc(100% - 20px); /* Deja un poco de espacio interno */
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Asegura que el padding no afecte el tamaño */
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .result span {
+            font-weight: bold;
+        }
+
+        .category {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <h1>Calculadora de IMC</h1>
+        <p>El Índice de Masa Corporal (IMC) es una medida utilizada para estimar si una persona tiene un peso saludable en relación con su altura.</p>
+
+        <input type="text" id="name" placeholder="Nombre" required>
+        <input type="number" id="age" placeholder="Edad" min="0" required>
+        
+        <select id="sex" required>
+            <option value="" disabled selected>Sexo</option>
+            <option value="male">Masculino</option>
+            <option value="female">Femenino</option>
+            <option value="other">Otro</option>
+        </select>
+
+        <input type="number" id="weight" placeholder="Peso (kg)" min="0" step="any">
+        <input type="number" id="height" placeholder="Altura (cm)" min="0" step="any">
+        <button onclick="calculateBMI()">Calcular IMC</button>
+
+        <div class="result" id="result"></div>
+        <div class="category" id="category"></div>
+    </div>
+
+    <script>
+        function calculateBMI() {
+            // Obtener los valores ingresados
+            const name = document.getElementById('name').value;
+            const age = parseInt(document.getElementById('age').value);
+            const sex = document.getElementById('sex').value;
+            const weight = parseFloat(document.getElementById('weight').value);
+            const heightInCm = parseFloat(document.getElementById('height').value);
+
+            // Validar que se ingresen todos los valores
+            if (!name || isNaN(age) || !sex || isNaN(weight) || isNaN(heightInCm) || weight <= 0 || heightInCm <= 0) {
+                document.getElementById('result').innerHTML = 'Por favor, complete todos los campos correctamente.';
+                document.getElementById('category').innerHTML = '';
+                return;
+            }
+
+            // Convertir altura de cm a metros
+            const heightInMeters = heightInCm / 100;
+
+            // Calcular el IMC
+            const bmi = weight / (heightInMeters * heightInMeters);
+            document.getElementById('result').innerHTML = name + ', tu IMC es: <span>' + bmi.toFixed(2) + '</span>';
+
+            // Determinar la categoría según el IMC
+            let category = '';
+            if (bmi < 18.5) {
+                category = 'Bajo peso';
+            } else if (bmi >= 18.5 && bmi < 24.9) {
+                category = 'Peso normal';
+            } else if (bmi >= 25 && bmi < 29.9) {
+                category = 'Sobrepeso';
+            } else {
+                category = 'Obesidad';
+            }
+
+            document.getElementById('category').innerHTML = 'Categoría: <span>' + category + '</span>';
+        }
+    </script>
+
+</body>
+</html>
