@@ -35,12 +35,12 @@
         }
 
         input[type="number"], input[type="text"], select {
-            width: calc(100% - 20px); /* Deja un poco de espacio interno */
+            width: calc(100% - 20px);
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
-            box-sizing: border-box; /* Asegura que el padding no afecte el tamaño */
+            box-sizing: border-box;
         }
 
         button {
@@ -66,7 +66,7 @@
             font-weight: bold;
         }
 
-        .category {
+        .category, .advice {
             margin-top: 10px;
             font-size: 16px;
         }
@@ -94,44 +94,66 @@
 
         <div class="result" id="result"></div>
         <div class="category" id="category"></div>
+        <div class="advice" id="advice"></div>
     </div>
 
     <script>
         function calculateBMI() {
-            // Obtener los valores ingresados
             const name = document.getElementById('name').value;
             const age = parseInt(document.getElementById('age').value);
             const sex = document.getElementById('sex').value;
             const weight = parseFloat(document.getElementById('weight').value);
             const heightInCm = parseFloat(document.getElementById('height').value);
 
-            // Validar que se ingresen todos los valores
             if (!name || isNaN(age) || !sex || isNaN(weight) || isNaN(heightInCm) || weight <= 0 || heightInCm <= 0) {
                 document.getElementById('result').innerHTML = 'Por favor, complete todos los campos correctamente.';
                 document.getElementById('category').innerHTML = '';
+                document.getElementById('advice').innerHTML = '';
                 return;
             }
 
-            // Convertir altura de cm a metros
             const heightInMeters = heightInCm / 100;
-
-            // Calcular el IMC
             const bmi = weight / (heightInMeters * heightInMeters);
             document.getElementById('result').innerHTML = name + ', tu IMC es: <span>' + bmi.toFixed(2) + '</span>';
 
-            // Determinar la categoría según el IMC
             let category = '';
+            let advice = '';
+
             if (bmi < 18.5) {
                 category = 'Bajo peso';
+                advice = `
+                    <strong>Recomendación:</strong> 
+                    Aumenta la ingesta de calorías con alimentos ricos en nutrientes como frutos secos, aguacates, proteínas magras y carbohidratos complejos. 
+                    Considera incluir snacks saludables entre comidas. 
+                    Consulta a un nutricionista para elaborar un plan alimenticio que te permita ganar peso de manera saludable.
+                `;
             } else if (bmi >= 18.5 && bmi < 24.9) {
                 category = 'Peso normal';
+                advice = `
+                    <strong>Recomendación:</strong> 
+                    Mantén una dieta equilibrada con frutas, verduras, proteínas y carbohidratos saludables. 
+                    Continúa con hábitos alimenticios saludables y realiza ejercicio moderado para mantener tu peso ideal.
+                `;
             } else if (bmi >= 25 && bmi < 29.9) {
                 category = 'Sobrepeso';
+                advice = `
+                    <strong>Recomendación:</strong> 
+                    Reduce la ingesta de azúcares y grasas saturadas. 
+                    Enfócate en alimentos integrales como frutas, verduras, proteínas magras y granos enteros. 
+                    Incrementa la actividad física con ejercicios aeróbicos para quemar calorías.
+                `;
             } else {
                 category = 'Obesidad';
+                advice = `
+                    <strong>Recomendación:</strong> 
+                    Adopta una dieta baja en calorías, rica en frutas, verduras y proteínas magras. 
+                    Evita alimentos procesados y bebidas azucaradas. 
+                    Consulta a un especialista en nutrición para un plan personalizado, y realiza actividad física regular.
+                `;
             }
 
             document.getElementById('category').innerHTML = 'Categoría: <span>' + category + '</span>';
+            document.getElementById('advice').innerHTML = advice;
         }
     </script>
 
